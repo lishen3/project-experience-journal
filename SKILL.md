@@ -3,7 +3,7 @@ name: project-experience-journal
 description: Summarize project work from the current conversation, user notes, project files, and optional Git evidence into dated, evidence-based experience records and Word-ready reports. Use for daily project journals, modeling competition logs, weekly or monthly reviews, portfolio narratives, and resume-oriented project summaries. Do not invent work or attribute AI-only actions to the user.
 metadata:
   short-description: Create dated, evidence-based project experience reports
-  version: 0.1.0
+  version: 0.2.0
 ---
 
 # Project Experience Journal
@@ -106,6 +106,10 @@ Before delivery, check:
 - unresolved work is not described as completed;
 - secrets, personal data, private URLs, local absolute paths, and proprietary content are excluded unless explicitly requested for a private artifact;
 - the report can be understood without reading the entire conversation.
+
+For formal, portfolio, interview, resume, or public output, record the four checks in the input JSON and run the strict preflight described in [references/input-schema.md](references/input-schema.md). Treat a technology name as confirmed only when it appears in scoped project evidence. Trace every numerical result to a test, measurement, Git evidence, or explicit user statement. If the source is missing, label the claim as unverified or omit it.
+
+Before reading or quoting project documents, minimize the material placed in scope. Redact credentials, personal identifiers, private URLs, customer data, local absolute paths, and proprietary content from generated artifacts. Describing a source as “project documentation” is usually enough; do not reproduce sensitive passages merely to prove they were consulted.
 
 ### 6. Export to Word when requested
 

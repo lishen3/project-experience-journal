@@ -5,6 +5,12 @@ The Word renderer accepts UTF-8 JSON with this structure:
 ```json
 {
   "title": "项目实践与能力成长记录",
+  "verification": {
+    "timeline_checked": true,
+    "technology_stack_checked": true,
+    "metrics_checked": true,
+    "privacy_checked": true
+  },
   "period_summary": {
     "项目概述": "Optional summary text",
     "阶段成果": ["Optional bullet"]
@@ -33,6 +39,7 @@ The Word renderer accepts UTF-8 JSON with this structure:
 Rules:
 
 - `title` is optional and defaults to `项目实践与能力成长记录`.
+- `verification` is optional for backward compatibility, but all four checks must be `true` for strict preflight validation.
 - `period_summary` is optional. Values may be strings or arrays of strings.
 - `entries` is required and must be a non-empty array.
 - Each entry requires ISO date `YYYY-MM-DD`, project name, and non-empty `sections`.
@@ -40,4 +47,12 @@ Rules:
 - Section values may be strings or arrays of strings.
 - Empty values are omitted from the Word document.
 - The renderer does not infer or verify facts. Evidence validation belongs to the agent workflow.
+
+Before formal, portfolio, interview, resume, or public delivery, run:
+
+```bash
+python scripts/validate_evidence.py evidence.json --strict
+```
+
+The preflight rejects invalid or unordered dates and likely sensitive data. It warns when numerical results or technology-stack claims need source confirmation. Review warnings against the evidence ledger; do not merely rewrite claims to evade detection.
 

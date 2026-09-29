@@ -9,6 +9,7 @@ $allowedExtensions = @(".md", ".py", ".ps1", ".json", ".yaml", ".yml", ".txt", "
 $ignoredDirectories = @(".git", ".venv", "venv", "node_modules", "__pycache__")
 $suspiciousNames = '(?i)(^\.env($|\.)|secret|credential|password|private[_-]?key|\.pem$|\.key$|\.pfx$|\.tmp$|\.temp$|\.bak$|~$)'
 $contentPattern = '(?i)(api[_-]?key\s*[:=]|secret\s*[:=]|password\s*[:=]|bearer\s+[a-z0-9._-]+|BEGIN [A-Z ]*PRIVATE KEY|[A-Z]:\\Users\\[^\\]+|/Users/[^/]+|/home/[^/]+)'
+$scannerFiles = @("scripts\check_public_safety.ps1", "scripts\validate_evidence.py")
 $findings = New-Object System.Collections.Generic.List[object]
 
 $files = Get-ChildItem -LiteralPath $resolvedRoot -Recurse -Force -File | Where-Object {
@@ -22,7 +23,7 @@ foreach ($file in $files) {
     if ($file.Name -match $suspiciousNames) {
         $findings.Add([pscustomobject]@{ Type = "name"; File = $relative; Detail = "Suspicious filename" })
     }
-    if (($allowedExtensions -contains $file.Extension.ToLowerInvariant()) -and ($relative -ne "scripts\check_public_safety.ps1")) {
+    if (($allowedExtensions -contains $file.Extension.ToLowerInvariant()) -and ($scannerFiles -notcontains $relative)) {
         $lineNumber = 0
         foreach ($line in Get-Content -LiteralPath $file.FullName -ErrorAction Stop) {
             $lineNumber++

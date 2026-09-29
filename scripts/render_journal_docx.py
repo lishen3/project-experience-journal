@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
 from docx import Document
@@ -47,9 +48,15 @@ def validate(payload: object) -> dict:
     for index, entry in enumerate(entries, start=1):
         if not isinstance(entry, dict):
             fail(f"entry {index} must be an object")
-        date = entry.get("date")
-        if not isinstance(date, str) or not DATE_PATTERN.fullmatch(date):
+        date_value = entry.get("date")
+        if not isinstance(date_value, str) or not DATE_PATTERN.fullmatch(date_value):
             fail(f"entry {index} date must use YYYY-MM-DD")
+        try:
+            parsed_date = date.fromisoformat(date_value)
+        except ValueError:
+            fail(f"entry {index} date is not a valid calendar date")
+        if parsed_date.isoformat() != date_value:
+            fail(f"entry {index} date must use zero-padded YYYY-MM-DD")
         project = entry.get("project")
         if not isinstance(project, str) or not project.strip():
             fail(f"entry {index} project is required")
