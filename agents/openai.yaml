@@ -1,5 +1,4 @@
 interface:
   display_name: "Project Experience Journal"
-  short_description: "Create dated, evidence-based project experience reports"
-  default_prompt: "Use $project-experience-journal to summarize the project work in this conversation into a dated, evidence-based report and clearly separate my contribution from AI-assisted work."
-
+  short_description: "Extract valuable, evidence-based project experience"
+  default_prompt: "Use $project-experience-journal to identify the project's highest-value problems, decisions, tradeoffs, and verified outcomes, then summarize them with accurate maturity and contribution attribution."
