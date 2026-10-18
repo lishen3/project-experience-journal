@@ -3,7 +3,7 @@ name: project-experience-journal
 description: Investigate project history and current state using available conversations, memory, files and Git; maintain linked timelines, issue histories and evidence indexes; generate evidence-based project journals, portfolio narratives, interview stories, resume bullets and Word-ready reports. Use for complete or incremental project experience reviews. Do not invent missing history or attribute AI-only actions to the user.
 metadata:
   short-description: Extract valuable, evidence-based project experience
-  version: 0.2.1
+  version: 0.3.0
 ---
 
 # Project Experience Journal
