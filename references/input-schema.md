@@ -56,3 +56,9 @@ python scripts/validate_evidence.py evidence.json --strict
 
 The preflight rejects invalid or unordered dates and likely sensitive data. It warns when numerical results or technology-stack claims need source confirmation. Review warnings against the evidence ledger; do not merely rewrite claims to evade detection.
 
+## Long-term archive and full-project reports
+
+The three Markdown records described in [long-term-records.md](long-term-records.md) are maintained before report rendering. Validate them with `python scripts/validate_archive.py ARCHIVE_DIRECTORY`.
+
+The Word renderer remains backward compatible: use `period_summary` sections for overview, issue ledger, architecture/decisions, current verification, unresolved risks, contribution boundaries, evidence index and handoff; use `entries` for dated phases. Unknown or approximate event dates belong in summary text or the Markdown archive, not fabricated ISO entry dates. A short report may select milestones while the archive retains complete scoped history. The verification booleans record investigator checks, not automatic proof that history is complete or claims true.
+

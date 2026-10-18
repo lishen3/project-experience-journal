@@ -1,6 +1,6 @@
 ---
 name: project-experience-journal
-description: Analyze and summarize project work from conversations, notes, project files, and optional Git evidence into value-focused, evidence-based journals, portfolio narratives, interview stories, resume bullets, or Word-ready reports. Use when the user needs both an accurate record and an explanation of the project's problems, decisions, tradeoffs, validation, and personal contribution. Do not invent work or attribute AI-only actions to the user.
+description: Investigate project history and current state using available conversations, memory, files and Git; maintain linked timelines, issue histories and evidence indexes; generate evidence-based project journals, portfolio narratives, interview stories, resume bullets and Word-ready reports. Use for complete or incremental project experience reviews. Do not invent missing history or attribute AI-only actions to the user.
 metadata:
   short-description: Extract valuable, evidence-based project experience
   version: 0.2.1
@@ -19,7 +19,7 @@ Use only evidence that is available in the current task:
 3. Read-only Git history when the user permits repository inspection.
 4. Build, test, analysis, and validation outputs produced during the task.
 
-Do not claim access to earlier conversations that are not visible. Ask for an exported transcript or notes only when missing history materially affects the requested period.
+Actively discover available memory, history-search, conversation-reading, handoff, file-search and Git capabilities. Search only project-relevant sources within their access boundaries. Record each source as searched (with coverage/cursor), unavailable, denied, or not applicable. Never imply that an unavailable search ran, or that missing evidence proves an event never happened. Ask for an export only when accessible alternatives cannot resolve a material gap.
 
 Separate contribution types and preserve the strongest distinction supported by the evidence:
 
@@ -33,6 +33,14 @@ Separate contribution types and preserve the strongest distinction supported by 
 Do not infer personal implementation from approval alone. Never convert an AI action into a user capability claim. Capability statements must be grounded in a user decision, explanation, correction, implementation, or verified adoption. When authorship remains uncertain, describe the project outcome separately from the user's contribution.
 
 ## Workflow
+
+### Investigation gate — before synthesis
+
+Unless the user explicitly requests a local edit, first read and follow [references/project-investigation.md](references/project-investigation.md) in order. This gate applies to daily, resume and Word requests too; limit retrieval to their scope. Read existing archives before assigning IDs. Complete the source-access log, timeline, issue-state reconciliation and completeness check before writing polished prose. Missing sources limit claims, not the ability to deliver supported findings.
+
+Maintain `PROJECT_TIMELINE.md`, `ISSUE_LEDGER.md`, and `EVIDENCE_INDEX.md` in the project's private experience archive using [references/long-term-records.md](references/long-term-records.md) and the bundled `templates/`. These are linked working records, not disposable exports. Reuse the existing archive location; otherwise use `project-experience/` inside the scoped project. A user-specified experience repository takes precedence. Never save real project evidence in this reusable Skill's source repository. For read-only/chat-only requests, return proposed record updates and disclose that files were not saved.
+
+The report is a view of those records: include project overview/contribution boundary, complete scoped timeline, issue ledger, technical decisions/architecture evolution, verified development results, unresolved risks, personal/AI contributions, experience/resume wording, next handoff and evidence index. Keep independent workstreams identifiable. A short resume or journal may condense the view; it must not erase unresolved records from the archive.
 
 ### 1. Establish scope
 
@@ -158,6 +166,8 @@ Before delivery, check:
 - failed experiments and rejected alternatives that materially changed the project are preserved;
 - secrets, personal data, private URLs, local absolute paths, and proprietary content are excluded unless explicitly requested for a private artifact;
 - the report can be understood without reading the entire conversation.
+
+Check the investigation completeness checklist in `references/project-investigation.md`. Run `python scripts/validate_archive.py <archive-directory>` after editing the three records. This checks record structure, IDs, references and status support, not whether the evidence is true. Resolve errors against sources; do not invent evidence to satisfy the validator. Report inaccessible sources, timeline gaps, uncertain dates, stale checks and unsaved updates explicitly.
 
 For formal, portfolio, interview, resume, or public output, record the four checks in the input JSON and run the strict preflight described in [references/input-schema.md](references/input-schema.md). Treat a technology name as confirmed only when it appears in scoped project evidence. Trace every numerical result to a test, measurement, Git evidence, or explicit user statement. If the source is missing, label the claim as unverified or omit it.
 
