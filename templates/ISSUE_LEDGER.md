@@ -10,6 +10,8 @@ If no issues are supported, explain the search coverage in the timeline investig
 ## P001 Issue title
 - First-seen: TO_FILL
 - Status: TO_FILL
+- Last-checked: TO_FILL
+- Recheck: TO_FILL (not rerun does not invalidate historical verification)
 - Cause-confidence: TO_FILL
 - Symptom: TO_FILL
 - Reproduction: TO_FILL

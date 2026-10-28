@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 from render_journal_docx import as_items, validate
+from report_model import iter_report_text
 
 
 SENSITIVE_PATTERNS = {
@@ -26,6 +27,14 @@ TECH_PATTERN = re.compile(
 
 
 def iter_text(payload: dict):
+    if payload.get('schema_version') == 2:
+        yield from iter_report_text(payload)
+        return
+    yield 'title', str(payload.get('title', ''))
+    summary = payload.get('period_summary')
+    for heading, value in (summary.items() if isinstance(summary, dict) else []):
+        for item in as_items(value):
+            yield 'period_summary.' + heading, item
     for entry_index, entry in enumerate(payload["entries"], start=1):
         for heading, value in entry["sections"].items():
             for item_index, item in enumerate(as_items(value), start=1):
@@ -36,7 +45,7 @@ def preflight(payload: dict) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
 
-    dates = [entry["date"] for entry in payload["entries"]]
+    dates = [entry["date"] for entry in payload.get("entries", [])]
     if dates != sorted(dates):
         errors.append("entries must be ordered from earliest to latest date")
 

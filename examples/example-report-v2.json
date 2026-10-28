@@ -1,0 +1,81 @@
+{
+  "schema_version": 2,
+  "profile": "full",
+  "title": "校园签到系统项目经历",
+  "as_of": "2026-10-28",
+  "verification": {
+    "timeline_checked": true,
+    "technology_stack_checked": true,
+    "metrics_checked": true,
+    "privacy_checked": true
+  },
+  "sections": [
+    {
+      "id": "overview",
+      "heading": "项目概况",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "项目用于校园活动现场签到，重点处理网络重复提交导致的重复记录。当前已完成重复请求校验和隔离验证，管理员导出仍待实现。"
+        }
+      ]
+    },
+    {
+      "id": "timeline",
+      "heading": "发展过程",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "签到入口与重复请求处理"
+        },
+        {
+          "type": "paragraph",
+          "text": "先确定二维码入口，再复现重复请求。根据复现结果，将同一请求只保留一条记录作为验收条件，并增加回归检查。"
+        }
+      ]
+    },
+    {
+      "id": "problems",
+      "heading": "关键问题与解决",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "网络重试可能生成多条签到记录。处理方式是给请求稳定身份，在保存记录时核对是否已经处理；重复提交返回已有结果。"
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "heading": "当前架构",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "页面收集签到请求，业务服务校验身份和请求标识，存储层负责保存并拒绝重复写入。界面根据已保存的结果显示反馈。"
+        }
+      ]
+    },
+    {
+      "id": "contribution",
+      "heading": "成果与个人贡献",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "用户确定了签到方式和重复请求规则，AI辅助补充测试。隔离检查确认重复请求不会新增第二条记录，实际现场网络仍需验收。"
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "heading": "未解决事项与下一步",
+      "blocks": [
+        {
+          "type": "bullets",
+          "items": [
+            "在真实活动网络下验证重试和失败提示。",
+            "补充管理员导出并核对权限范围。"
+          ]
+        }
+      ]
+    }
+  ]
+}

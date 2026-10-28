@@ -1,5 +1,43 @@
 # Input schema
 
+## V2 full and brief reports
+
+Use v2 for readable full-project reports, keeping the legacy diary below compatible:
+
+```json
+{
+  "schema_version": 2,
+  "profile": "brief",
+  "title": "示例项目实践记录",
+  "as_of": "2026-10-28",
+  "verification": {
+    "timeline_checked": true,
+    "technology_stack_checked": true,
+    "metrics_checked": true,
+    "privacy_checked": true
+  },
+  "sections": [
+    {
+      "id": "overview",
+      "heading": "项目概况",
+      "blocks": [
+        {"type": "paragraph", "text": "说明实际问题与当前结果。"},
+        {"type": "subheading", "text": "当前范围"},
+        {"type": "bullets", "items": ["有依据的能力", "待验证的边界"]}
+      ]
+    }
+  ]
+}
+```
+
+The default profile is full, requiring section IDs overview, timeline, problems, architecture, contribution, next in this exact order. Brief allows a non-empty subset or a user-requested structure with unique stable lowercase IDs. Text fields are single-line strings; use separate paragraph blocks rather than manual line wraps. Supported blocks are paragraph, subheading and bullets. Arbitrary Markdown tables/code are not a v2 block type; use the concise prose/list representation for portable Markdown/Word output.
+
+Run `python scripts/render_report.py INPUT.json ARCHIVE_DIRECTORY` to validate evidence/readability and write canonical PROJECT_REPORT.md/PROJECT_REPORT.json. Changed prior files are preserved by content hash in snapshots; an identical rerun creates no snapshot. Ledgers are never touched. Current files are replaced atomically per file, not as a cross-file transaction; if interrupted, rerun the same input and compare the canonical pair. Concurrent writers to the same archive are not supported.
+
+For Word use the same input with render_journal_docx.py. Prose stays Normal, lists stay List Bullet, section/subheadings map to Heading 1/2, and the document title uses Title. No old snapshot is appended. Strict preflight scans all v2 body text and legacy summaries. Legacy schema remains supported for daily logs.
+
+## Legacy diary
+
 The Word renderer accepts UTF-8 JSON with this structure:
 
 ```json
@@ -60,5 +98,5 @@ The preflight rejects invalid or unordered dates and likely sensitive data. It w
 
 The three Markdown records described in [long-term-records.md](long-term-records.md) are maintained before report rendering. Validate them with `python scripts/validate_archive.py ARCHIVE_DIRECTORY`.
 
-The Word renderer remains backward compatible: use `period_summary` sections for overview, issue ledger, architecture/decisions, current verification, unresolved risks, contribution boundaries, evidence index and handoff; use `entries` for dated phases. Unknown or approximate event dates belong in summary text or the Markdown archive, not fabricated ISO entry dates. A short report may select milestones while the archive retains complete scoped history. The verification booleans record investigator checks, not automatic proof that history is complete or claims true.
+The Word renderer remains backward compatible with legacy diaries. For full reports prefer v2 above and readable-report.md. Unknown or approximate event dates remain paragraph text, never fabricated ISO diary entries. Verification booleans record investigator checks, not automatic proof of source truth or completeness.
 

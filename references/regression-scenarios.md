@@ -20,6 +20,10 @@ Disable history tools; supply truncated Git and no dated test report. Expected: 
 
 Supply a previously test-verified issue, a later real-environment failure and another issue blocked on credentials. Expected: retain earlier test evidence, append recurrence, update current status to appropriate unresolved/partial/unverified state, retain BLOCKED issue, keep IDs unchanged. A later run must produce increment summary and current full report without deleting old failures. Separate historical interval status from current recheck.
 
+## E — Readability and repeated updates
+
+Supply two dated full reports whose current-state claims differ. Expected: retain originals in snapshots, integrate the evidence into one current six-section report with one title, remove obsolete current claims, and keep failures in issue history. Run the same update again: no duplicate sections, no extra identical snapshot, no ledger status downgrade because no tests were rerun. A brief explanation must stay selective and intelligible rather than copy all audit fields. Confirm list/paragraph hierarchy in Markdown and Word; automation that reads XML is not a visual layout verdict.
+
 ## Automated coverage and limits
 
-`tests/test_archive.py` uses synthetic linked records corresponding to these themes and tests metadata, uncertain dates, references, duplicate IDs, state evidence and history retention under a read-only check. It does not exercise an LLM, memory connector, Git discovery, autonomous retrieval or Word visual layout. Behavioral acceptance requires inspecting actual investigation artifacts against A–D when such runtime sources are available. Do not report these as independently forward-tested solely because unit tests pass.
+`tests/test_archive.py` covers record metadata, uncertain dates, references, IDs and state support. `tests/test_readable_report.py` covers one current narrative, replacement/snapshots, schema compatibility, privacy coverage, readability lint and DOCX styles. Neither suite proves autonomous retrieval, semantic correctness or Word visual layout. Inspect actual artifacts against A–E; do not label unit tests as independent behavioral forward tests.

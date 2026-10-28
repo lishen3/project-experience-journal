@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Experience Journal"
   short_description: "Extract valuable, evidence-based project experience"
-  default_prompt: "Use $project-experience-journal to identify the project's highest-value problems, decisions, tradeoffs, and verified outcomes, then summarize them with accurate maturity and contribution attribution."
+  default_prompt: "Use $project-experience-journal to investigate this project and maintain one readable current report, integrating new evidence into its sections while preserving linked history separately."

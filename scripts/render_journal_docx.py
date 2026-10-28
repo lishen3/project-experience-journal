@@ -12,7 +12,9 @@ from pathlib import Path
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
-from docx.shared import Cm, Pt
+from docx.shared import Cm, Pt, RGBColor
+
+from report_model import validate_report
 
 
 DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -42,6 +44,8 @@ def as_items(value: object) -> list[str]:
 def validate(payload: object) -> dict:
     if not isinstance(payload, dict):
         fail("Input root must be a JSON object")
+    if 'schema_version' in payload:
+        return validate_report(payload)
     entries = payload.get("entries")
     if not isinstance(entries, list) or not entries:
         fail("entries must be a non-empty array")
@@ -84,18 +88,33 @@ def add_items(document: Document, value: object) -> None:
 
 
 def render(payload: dict, destination: Path) -> None:
+    validate(payload)
     document = Document()
     section = document.sections[0]
+    section.page_width = Cm(21)
+    section.page_height = Cm(29.7)
     section.top_margin = Cm(2.54)
     section.bottom_margin = Cm(2.54)
     section.left_margin = Cm(2.7)
     section.right_margin = Cm(2.7)
 
-    title = document.add_paragraph()
-    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    title = document.add_paragraph(style='Title')
+    title.alignment = WD_ALIGN_PARAGRAPH.LEFT
     title_run = title.add_run(str(payload.get("title") or DEFAULT_TITLE))
     set_font(title_run, east_asia="黑体", size=20)
     title_run.bold = True
+
+    if payload.get('schema_version') == 2:
+        document.add_paragraph('更新日期：' + payload['as_of'], style='Subtitle')
+        for item in payload['sections']:
+            document.add_heading(item['heading'], level=1)
+            for block in item['blocks']:
+                if block['type'] == 'subheading':
+                    document.add_heading(block['text'], level=2)
+                elif block['type'] == 'bullets':
+                    add_items(document, block['items'])
+                else:
+                    set_font(document.add_paragraph().add_run(block['text']))
 
     period_summary = payload.get("period_summary")
     if isinstance(period_summary, dict) and period_summary:
@@ -107,7 +126,7 @@ def render(payload: dict, destination: Path) -> None:
             document.add_heading(str(heading), level=2)
             add_items(document, items)
 
-    for entry in payload["entries"]:
+    for entry in payload.get("entries", []):
         stage = str(entry.get("stage") or "").strip()
         heading = f"{entry['date']}｜{entry['project'].strip()}"
         if stage:
@@ -126,11 +145,20 @@ def render(payload: dict, destination: Path) -> None:
         style.font.name = "Aptos"
         style._element.rPr.rFonts.set(qn("w:eastAsia"), "等线")
         style.font.size = Pt(11)
+        style.paragraph_format.line_spacing = 1.35
+        style.paragraph_format.space_after = Pt(8)
+        style.paragraph_format.widow_control = True
+        style.font.color.rgb = RGBColor(0, 0, 0)
     for style_name, size in (("Title", 20), ("Heading 1", 15), ("Heading 2", 12)):
         style = styles[style_name]
         style.font.name = "Aptos Display"
         style._element.rPr.rFonts.set(qn("w:eastAsia"), "黑体")
         style.font.size = Pt(size)
+        style.font.color.rgb = RGBColor(0, 0, 0)
+        style.paragraph_format.space_before = Pt(16 if style_name == 'Heading 1' else 10)
+        style.paragraph_format.space_after = Pt(7)
+        style.paragraph_format.keep_with_next = True
+    document.styles['Subtitle'].font.color.rgb = RGBColor(0, 0, 0)
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     document.save(destination)

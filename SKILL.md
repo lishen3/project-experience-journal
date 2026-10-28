@@ -3,7 +3,7 @@ name: project-experience-journal
 description: Investigate project history and current state using available conversations, memory, files and Git; maintain linked timelines, issue histories and evidence indexes; generate evidence-based project journals, portfolio narratives, interview stories, resume bullets and Word-ready reports. Use for complete or incremental project experience reviews. Do not invent missing history or attribute AI-only actions to the user.
 metadata:
   short-description: Extract valuable, evidence-based project experience
-  version: 0.3.0
+  version: 0.4.0
 ---
 
 # Project Experience Journal
@@ -40,7 +40,7 @@ Unless the user explicitly requests a local edit, first read and follow [referen
 
 Maintain `PROJECT_TIMELINE.md`, `ISSUE_LEDGER.md`, and `EVIDENCE_INDEX.md` in the project's private experience archive using [references/long-term-records.md](references/long-term-records.md) and the bundled `templates/`. These are linked working records, not disposable exports. Reuse the existing archive location; otherwise use `project-experience/` inside the scoped project. A user-specified experience repository takes precedence. Never save real project evidence in this reusable Skill's source repository. For read-only/chat-only requests, return proposed record updates and disclose that files were not saved.
 
-The report is a view of those records: include project overview/contribution boundary, complete scoped timeline, issue ledger, technical decisions/architecture evolution, verified development results, unresolved risks, personal/AI contributions, experience/resume wording, next handoff and evidence index. Keep independent workstreams identifiable. A short resume or journal may condense the view; it must not erase unresolved records from the archive.
+The report is a reader-facing synthesis, not a concatenation of records. Read [references/readable-report.md](references/readable-report.md) before writing or updating. A full report has six sections: overview, development, key problems/solutions, current architecture, outcomes/contributions, remaining work. Link exhaustive issues/evidence; preserve workstreams and unresolved facts. Adapt length for brief, resume and diary requests. Keep snapshots separate from the one current narrative.
 
 ### 1. Establish scope
 
@@ -130,7 +130,7 @@ Use the title:
 
 `# 项目实践与能力成长记录`
 
-For each date, include the useful subset of:
+For a dated diary, include the useful subset of:
 
 - 项目名称与阶段；
 - 当日目标；
@@ -172,6 +172,8 @@ Check the investigation completeness checklist in `references/project-investigat
 For formal, portfolio, interview, resume, or public output, record the four checks in the input JSON and run the strict preflight described in [references/input-schema.md](references/input-schema.md). Treat a technology name as confirmed only when it appears in scoped project evidence. Trace every numerical result to a test, measurement, Git evidence, or explicit user statement. If the source is missing, label the claim as unverified or omit it.
 
 Before reading or quoting project documents, minimize the material placed in scope. Redact credentials, personal identifiers, private URLs, customer data, local absolute paths, and proprietary content from generated artifacts. Describing a source as “project documentation” is usually enough; do not reproduce sensitive passages merely to prove they were consulted.
+
+For reader-facing Markdown run `python scripts/lint_report.py PROJECT_REPORT.md --strict` and read the entire rendered result for hierarchy, duplication, flow and current-state consistency. Use v2 report blocks for full narratives, retaining legacy diary compatibility.
 
 ### 9. Export to Word when requested
 

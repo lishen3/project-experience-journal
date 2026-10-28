@@ -53,4 +53,4 @@ Before report generation, record checked/gap/not-applicable with evidence or exp
 - gaps, unavailable sources and their impact;
 - completed, partial and unresolved work shown separately.
 
-On later runs append a dated investigation entry with interval, prior cutoff, source coverage, additions/corrections/reopened issues and next retrieval cursor. Rebuild the current full report from the records. Do not silently replace historical failures with latest successes. No automatic commits, pushes or public publication of project records without an explicit user request.
+On later runs append a dated investigation entry with interval, prior cutoff, source coverage, additions/corrections/reopened issues and next retrieval cursor. Rebuild the current full report from the records using readable-report.md; never append a previous full report to it. Preserve historical failures in the ledger and snapshots. Keep supported status when merely not rerunning; record Last-checked/Recheck separately. No automatic commits, pushes or public publication of project records without an explicit user request.

@@ -1,8 +1,8 @@
 # Project Experience Journal Skill
 
-`project-experience-journal` 是一个面向 Codex、Claude Code 等编程 Agent 的通用项目经历总结 Skill。它根据当前对话、用户笔记、项目文件和可选 Git 证据，生成按日期组织、适合复盘或放入 Word 的项目经历记录。
+`project-experience-journal` 是一个面向 Codex、Claude Code 等编程 Agent 的项目经历整理 Skill。它调查可访问的历史与当前状态，维护长期证据档案，并生成结构清晰、能够持续修订的项目正文或 Word 文档；日记模式仍按日期组织。
 
-当前发布版本：`v0.3.0`
+当前发布版本：`v0.4.0`
 
 ## 1. 项目解决什么问题
 
@@ -105,6 +105,22 @@ python scripts/validate_archive.py path/to/private-project-archive
 
 档案更新本身不授权提交、推送或公开发布；需要用户明确要求。日记和简历可输出简短视图，但长期档案保留完整调查结果。
 
+## 生成清晰且可持续更新的正文
+
+完整项目经历按项目概况、发展过程、关键问题与解决、当前架构、成果与个人贡献、未解决事项与下一步组织。每次新增经历重新整合相关章节，只保留一份当前正文；历史快照在独立目录，问题过程在台账，不再把旧全文追加到正文中。
+
+参考 `examples/example-report-v2.json` 准备段落、小标题与列表，然后运行：
+
+```bash
+python scripts/render_report.py report.json path/to/private-project-archive
+python scripts/lint_report.py path/to/private-project-archive/PROJECT_REPORT.md --strict
+python scripts/render_journal_docx.py report.json project-experience.docx
+```
+
+Markdown 导出工具先运行严格证据预检和阅读结构检查；独立使用 Word 渲染命令前，需先运行严格证据预检。内容变更前，旧 Markdown/JSON 按内容哈希保存到 snapshots；重复导出相同内容不生成多余快照。每个文件单独原子替换，不支持同时多个写入者。工具负责呈现已经整理好的内容，语义合并与事实核对仍由 Agent 完成。
+
+Markdown 是便于阅读的正文；三个长期档案保存详细问题与来源。历史测试通过状态不会因为本轮没重测而降级，最近复核情况单独记录。自动检查不能保证行文自然或 Word 分页正确：交付前需通读和检查实际渲染，缺少视觉工具时明确限定验证范围。
+
 ## 5. 输入输出示例
 
 ### 示例输入
@@ -183,6 +199,17 @@ pwsh -NoProfile -File scripts/check_public_safety.ps1 -Root .
 本项目采用 MIT License，详见 [LICENSE](LICENSE)。
 
 ## 版本说明
+
+### v0.4.0
+
+- 正文与证据档案分层：完整经历固定六部分，旧全文单独归档，不再连续拼接多份“当前结论”。
+- 增量更新按稳定章节整合，并核对相关章节；保留历史问题状态，另记本次是否复查。
+- 增加 v2 段落/小标题/列表输入，Markdown 和 Word 使用同一份内容；原日日志 JSON 继续兼容。
+- 新增正文阅读检查与幂等导出，改稿前保留内容哈希快照，重复导出不制造快照。
+- Word 改用真正 Title、黑色分级标题与普通正文段落，增加行距、段距和标题随下段设置。
+- 严格证据预检覆盖正文与旧摘要；自动测试、实际阅读检查与视觉验收分别说明。
+
+完整使用规范见 [阅读与更新规则](references/readable-report.md)。
 
 ### v0.3.0
 
